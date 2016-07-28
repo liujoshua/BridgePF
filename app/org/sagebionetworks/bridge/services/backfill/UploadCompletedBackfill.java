@@ -28,7 +28,6 @@ import org.sagebionetworks.bridge.services.UploadService;
  */
 @Component
 public class UploadCompletedBackfill extends AsyncBackfillTemplate {
-
     private static final int LOCK_EXPIRY_IN_SECONDS = 60 * 10;
 
     private static final double UPLOAD_CHECKS_PER_SECOND = 10.0;
@@ -72,8 +71,7 @@ public class UploadCompletedBackfill extends AsyncBackfillTemplate {
     public void setHealthCodeDao(HealthCodeDao healthCodeDao) {
         this.healthCodeDao = healthCodeDao;
     }
-
-
+    
     @Override
     int getLockExpireInSeconds() {
         return LOCK_EXPIRY_IN_SECONDS;
