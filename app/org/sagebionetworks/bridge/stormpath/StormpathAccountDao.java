@@ -461,16 +461,21 @@ public class StormpathAccountDao implements AccountDao {
         
         List<SubpopulationGuid> subpopGuids = getSubpopulationGuids(studyId);
         StormpathAccount account = new StormpathAccount(studyId, subpopGuids, acct, encryptors);
-        HealthId healthId = null;
+
+        String healthId = account.getHealthId();
+
+        HealthId healthIdMap = null;
         if (account.getHealthCode() == null) {
-            healthId = healthCodeService.getMapping(account.getHealthId());
+            // get mapping for currently associated healthCode
+            healthIdMap = healthCodeService.getMapping(healthId);
         }
-        if (healthId == null) {
-            healthId = healthCodeService.createMapping(studyId);
-            account.setHealthId(healthId);
+        if (healthIdMap == null) {
+            // generate new mapping, reusing healthId if it already exists
+            healthIdMap = healthCodeService.createMapping(studyId, healthId);
+            account.setHealthId(healthIdMap);
             updateAccount(account);
         } else {
-            account.setHealthId(healthId);    
+            account.setHealthId(healthIdMap);
         }
         return account;
     }
